@@ -1,0 +1,154 @@
+--module-path C:\Users\User\openjfx-19_windows-x64_bin-sdk\javafx-sdk-19\lib --add-modules javafx.controls,javafx.graphics,javafx.media,javafx.fxml
+
+
+String image_path= ClassLoader.getSystamResource("images/home.jpg").toString();
+ImageView imageView = new imageView(new Image(image_path));
+
+ตัวอย่างการสร้าง interface
+package fighters.base;
+
+public interface Guardable {
+	public abstract void guard();
+}
+----------------------------------------------------------
+
+
+Java Fx Command
+-Set Action
+btn.setOnAction(new EventHandler<ActionEvent>() {
+	public void handle(ActionEvent event) {
+		System.out.println("Hello World");
+	}
+});
+
+ BackgroundFill background_fill = new BackgroundFill(Color.WHITE,CornerRadii.EMPTY, Insets.EMPTY);
+ Background background = new Background(background_fill);
+ this.setBackground(background);
+
+		-Box
+		numberSquare.setAlignment(Pos.CENTER);
+		numberSquare.setMinSize(64, 64);
+		numberSquare.setMaxSize(64, 64);
+		
+		numberSquare.setBorder(new Border(new BorderStroke(Color.GOLD, BorderStrokeStyle.SOLID,CornerRadii.EMPTY, new BorderWidths(0,1,1,0))));
+		Text numberText = new Text();
+		numberText.setFill(Color.BLACK);
+		numberText.setFont(new Font(20));
+		numberSquare.getChildren().add(numberText);
+		numberSquare.setNumberText(numberText);
+
+		drawButton=new Button("Draw a number".);
+		bingoText=new Text("Bingo!!");
+
+
+
+Thread command
+	Way1
+
+class MyThread extends Thread{
+	public MyThread(String n) {
+	super(n);
+}
+public void run(){
+	for(int i=0; i<100; ++i)
+	System.out.print(getName());
+	}
+}
+public class ThreadTest {
+	public static void main(String[] args){
+		new MyThread("A").start();
+		new MyThread("B").start();
+	}
+}
+result
+	AAAAAAAAAAAAAAAAAAAABBBBBBBBBBB
+	BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAB
+	BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+	BBBBBBBBBBBBBBBBBBBBAAAAABBBBBBA
+	AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+	AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+	AAAAAAAAAAA
+-----------------------------------------------------
+	Way2
+class MyRunnable implements Runnable{
+	public void run(){
+		for(int i=0; i<100; ++i)
+		System.out.print(Thread.currentThread().getName());
+	}
+}
+public class RunnableTest {
+	public static void main(String[] args) {
+		Runnable r = new MyRunnable();
+		new Thread(r, "A").start();
+		new Thread(r, "B").start();
+	}
+}
+result
+	AAAAAAAAAAAAAAAAAAAABBBBBBBBBBB
+	BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAB
+	BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+	BBBBBBBBBBBBBBBBBBBBAAAAABBBBBBA
+	AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+	AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+	AAAAAAAAAAA
+-----------------------------------------------------------------
+Sleep Thread
+
+class SleepThread extends Thread{
+	public void run(){
+		try{
+			Thread.sleep(1);
+		}
+		catch(InterruptedException e){}
+}
+}
+public class SleepState {
+	public static void main(String[] args) {
+		SleepThread t = new SleepThread();
+		System.out.println(t.getState());
+		t.start();
+		Thread.State s;
+		do{
+			s = t.getState();
+			System.out.println(s);
+			}while(s != Thread.State.TERMINATED);
+		}
+}
+result 
+	NEW
+	RUNNABLE
+	TIMED_WAITING
+	TIMED_WAITING
+	TIMED_WAITING
+	TIMED_WAITING
+	TIMED_WAITING
+	RUNNABLE
+	TERMINATED
+
+
+Thread.join() คือ รอให้ Thread รันจบก่อน แล้วถึงจะรับบรรทัดต่อไป
+เมื่อ Thread ดดน interupt มันจะเลิก sleep แล้ว throw ไปที่ InterruptedException e แล้วก็รันต่อเลยไม่ต้องรอเวลาหมดตาม duration
+
+
+
+
+
+button.setOnAction(new EventHandler<ActionEvent>() {
+	@Override
+	public void handle(ActionEvent event) {
+		Thread thread = new Thread(() -> {
+		try {
+			Thread.sleep(5000);
+			Platform.runLater(new Runnable(){
+				@Override
+				public void run() {
+					displayLabel.setText(textField.getText());
+					}
+				});
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	});
+	thread.start();
+	}
+});
